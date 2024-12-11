@@ -69,8 +69,8 @@ end
 function Estimate(data,targetDay)
 
     Data = get(data, "Data");
-    x_points = cell2mat(Data(:,1));
-    y_points = cell2mat(Data(:,2));
+    x_points = cell2mat(Data(1,:));
+    y_points = cell2mat(Data(2,:));
     Day = targetDay;
 
     if (Day >= x_points(1) && Day <= rows(x_points))
@@ -79,5 +79,14 @@ function Estimate(data,targetDay)
       Coff = leastSquares(x_points,y_points,3);
       result = Coff(1) + Coff(2)*Day + Coff(3)*Day^2 + Coff(4)*Day^3;
     endif
+     x_points = [x_points,Day];
+    y_points = [y_points,result];
+    figure;
+    plot(x_points, y_points, '-o', 'LineWidth', 2, 'MarkerSize', 8);
+    xlabel('Day');
+    ylabel('Temperature');
+    title('Temperature Data');
+    grid on;
+end           
 
 end
