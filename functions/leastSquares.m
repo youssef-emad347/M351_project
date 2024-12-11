@@ -1,6 +1,5 @@
 function [s] = leastSquares(x_points,y_points,degree);
   n = degree + 1 ;
-  m = length(x_points);
   A = zeros(n,n);
   B = zeros(n,1);
   A(1,1) = length(x_points);
