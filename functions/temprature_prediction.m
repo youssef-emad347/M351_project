@@ -49,12 +49,12 @@ function Next(inputField, f)
                 "Position", [0.05, 0.45, table_width, 0.155]);
 
  # Box to enter the day user wants to estimate
-    uicontrol(p, "style", "text", "string", "Enter number of day you want :", ...
+    uicontrol(f, "style", "text", "string", "Enter number of day you want :", ...
              "Units" ,"normalized", ...
              "position", [0.1, 0.32, 0.5, 0.05], ...
              "horizontalalignment", "left");
 
-    targetDay = uicontrol(p, "style", "edit","Units" ,"normalized", "position", [0.35, 0.32, 0.1, 0.05]);
+    targetDay = uicontrol(f, "style", "edit","Units" ,"normalized", "position", [0.35, 0.32, 0.1, 0.05]);
 
  # Button for estimate
     uicontrol(f, "Style", "pushbutton", "String", "Estimate", ...
@@ -67,26 +67,35 @@ end
 
 # funtion for estimate use Lagrange or leastSquares
 function Estimate(data,targetDay)
-
+    Day = str2num(get(targetDay,"String"));
     Data = get(data, "Data");
     x_points = cell2mat(Data(1,:));
     y_points = cell2mat(Data(2,:));
-    Day = targetDay;
-
+    disp(Day);
     if (Day >= x_points(1) && Day <= rows(x_points))
       result = Lagrange(x_points,y_points,Day);
     else
       Coff = leastSquares(x_points,y_points,3);
       result = Coff(1) + Coff(2)*Day + Coff(3)*Day^2 + Coff(4)*Day^3;
     endif
-     x_points = [x_points,Day];
-    y_points = [y_points,result];
-    figure;
-    plot(x_points, y_points, '-o', 'LineWidth', 2, 'MarkerSize', 8);
+    x_points = [x_points];
+    y_points = [y_points];
+    l = figure("position", [350,250,450,360],...
+               "name", "Temprature Perdiction",...
+               "Menubar","none","toolbar","figure");
+    figure(l);
+    plot(x_points, y_points, '-x', 'LineWidth', 1, 'MarkerSize', 3);
+    hold on;
+    plot(Day, result, '-x','LineWidth', 2,'MarkerSize', 4);
     xlabel('Day');
     ylabel('Temperature');
     title('Temperature Data');
     grid on;
-end           
-
+    w = uifigure("position", [800,325,400,250],...
+               "name", "Result");
+    str = ["Temperature of the day : ",num2str(result)," °C"];
+     uicontrol(w, "style", "text", "string", str, ...
+     "Units" ,"normalized", ...
+     "position", [0, 0, 1, 1], ...
+     "horizontalalignment", "center" , "fontsize",14);
 end
