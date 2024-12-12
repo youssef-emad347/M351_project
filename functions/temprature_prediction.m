@@ -71,7 +71,6 @@ function Estimate(data,targetDay)
     Data = get(data, "Data");
     x_points = cell2mat(Data(1,:));
     y_points = cell2mat(Data(2,:));
-    disp(Day);
     if (Day >= x_points(1) && Day <= rows(x_points))
       result = Lagrange(x_points,y_points,Day);
     else
@@ -86,7 +85,7 @@ function Estimate(data,targetDay)
     figure(l);
     plot(x_points, y_points, '-x', 'LineWidth', 1, 'MarkerSize', 3);
     hold on;
-    plot(Day, result, '-x','LineWidth', 2,'MarkerSize', 4);
+    plot(Day, result, 'x','LineWidth', 2,'MarkerSize', 4);
     xlabel('Day');
     ylabel('Temperature');
     title('Temperature Data');
